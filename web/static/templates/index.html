@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light">
+  <meta name="description" content="Prospect Atlas turns Google Maps searches into clean, filterable local-business datasets.">
+  <title>Prospect Atlas — Local lead discovery</title>
+  <link rel="stylesheet" href="/static/css/main.css"><script src="/static/js/dashboard.js" defer></script>
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Prospect Atlas home"><span class="brand-mark" aria-hidden="true"><i></i></span><span>Prospect Atlas</span><small>LOCAL DISCOVERY</small></a>
+    <div class="topbar-status"><span class="health-dot" id="healthDot"></span><span id="healthText">Checking engine</span><a href="/api/docs" target="_blank" rel="noopener">API</a></div>
+  </header>
+  <main class="workspace">
+    <aside class="composer" aria-label="Create a search">
+      <div class="section-heading"><p class="eyebrow">New search</p><h1>Build a local dataset</h1><p>Turn a place category and market into a clean, exportable lead list.</p></div>
+      <form id="searchForm" novalidate>
+        <div class="primary-fields">
+          <div class="field-row"><label for="businessType">Business or place type</label><input id="businessType" type="text" placeholder="e.g. Independent coffee shops" autocomplete="off"><small class="field-error" data-error-for="businessType"></small></div>
+          <div class="field-row"><label for="location">Target market</label><input id="location" type="text" placeholder="e.g. Brooklyn, NY" autocomplete="off"><small class="field-error" data-error-for="location"></small></div>
+        </div>
+        <div class="field-row"><div class="label-line"><label for="extraQueries">More searches</label><span>one complete query per line · optional</span></div><textarea id="extraQueries" rows="3" placeholder="Museums near Central Park&#10;24-hour pharmacies in Toronto"></textarea></div>
+        <fieldset class="preset-fieldset"><legend>Search preset</legend><div class="preset-list" id="presetList">
+          <button type="button" class="preset active" data-preset="quick"><b>Quick check</b><span>Small, fast sample</span></button>
+          <button type="button" class="preset" data-preset="standard"><b>Focused search</b><span>Balanced local coverage</span></button>
+          <button type="button" class="preset" data-preset="enriched"><b>Website + email</b><span>Enrich contact details</span></button>
+          <button type="button" class="preset" data-preset="large"><b>Deep search</b><span>Maximum coverage</span></button>
+        </div></fieldset>
+        <details class="settings" id="settingsPanel"><summary><span>Search settings</span><small id="settingsSummary">Depth 1 · 10 minutes</small></summary><div class="settings-body">
+          <div class="field-row"><label for="jobName">Result list name <small>optional</small></label><input id="jobName" name="name" type="text" placeholder="Generated from your search" autocomplete="off"><small>Leave blank and we’ll name it automatically.</small></div>
+          <div class="field-grid three">
+            <div class="field-row"><label for="depth">Depth</label><input id="depth" name="depth" type="number" min="1" max="100" value="1"><small>More results, slower run</small></div>
+            <div class="field-row"><label for="zoom">Map zoom</label><input id="zoom" name="zoom" type="number" min="1" max="21" value="15"><small>15 works for most cities</small></div>
+            <div class="field-row"><label for="maxTime">Time limit</label><select id="maxTime" name="maxtime"><option value="5m">5 minutes</option><option value="10m" selected>10 minutes</option><option value="20m">20 minutes</option><option value="30m">30 minutes</option></select></div>
+          </div>
+          <div class="field-grid three">
+            <div class="field-row"><label for="language">Language</label><input id="language" name="lang" value="en" maxlength="2"></div>
+            <div class="field-row"><label for="radius">Radius (meters)</label><input id="radius" name="radius" type="number" min="100" value="10000"></div>
+            <label class="switch-row"><input id="fetchEmails" name="email" type="checkbox"><span><b>Find emails</b><small>Crawls business websites</small></span></label>
+          </div>
+          <details class="geo-settings"><summary>Coordinate targeting and fast mode</summary><div class="field-grid three">
+            <div class="field-row"><label for="latitude">Latitude</label><input id="latitude" name="latitude" value="0"></div>
+            <div class="field-row"><label for="longitude">Longitude</label><input id="longitude" name="longitude" value="0"></div>
+            <label class="switch-row"><input id="fastMode" name="fastmode" type="checkbox"><span><b>Fast mode</b><small>Requires real coordinates</small></span></label>
+          </div></details>
+          <div class="field-row"><div class="label-line"><label for="proxies">Proxies</label><span>one URL per line · optional</span></div><textarea id="proxies" name="proxies" rows="2" placeholder="http://user:password@host:port"></textarea><small>Recommended for repeated or large searches.</small></div>
+        </div></details>
+        <div class="form-message" id="formMessage" role="alert"></div>
+        <button class="primary-action" type="submit" id="startButton"><span>Start search</span><span aria-hidden="true">→</span></button>
+        <p class="form-note">Private by default. Runs in Docker and saves results on this computer.</p>
+      </form>
+    </aside>
+    <section class="main-stage">
+      <div class="stage-header"><div><p class="eyebrow">Workspace</p><h2>Discovery runs</h2></div><button class="text-button" id="refreshJobs" type="button">Refresh</button></div>
+      <div class="job-list" id="jobList" aria-live="polite"><div class="empty-state"><span class="loader"></span><p>Loading searches…</p></div></div>
+      <section class="results-panel" id="resultsPanel" hidden>
+        <div class="results-head"><div><button class="back-button" id="closeResults" type="button">← Discovery runs</button><h2 id="resultsTitle">Results</h2><p id="resultsSubtitle"></p></div><div class="export-actions"><button class="secondary-button" id="exportCsv" type="button">Export CSV</button><button class="primary-small" id="exportExcel" type="button">Export Excel (.xls)</button></div></div>
+        <div class="metrics" id="metrics"></div>
+        <div class="filterbar">
+          <label class="search-box"><span aria-hidden="true">⌕</span><input id="resultSearch" type="search" placeholder="Search names, categories, locations…"></label>
+          <select id="contactFilter" aria-label="Contact availability"><option value="all">All contacts</option><option value="email">Has email</option><option value="phone">Has phone</option><option value="website">Has website</option><option value="complete">Complete contact</option></select>
+          <select id="ratingFilter" aria-label="Minimum rating"><option value="0">Any rating</option><option value="4">4.0+ rating</option><option value="4.5">4.5+ rating</option></select>
+          <select id="reviewFilter" aria-label="Minimum reviews"><option value="0">Any review count</option><option value="10">10+ reviews</option><option value="50">50+ reviews</option><option value="100">100+ reviews</option></select>
+          <button class="secondary-button" id="columnButton" type="button">Columns</button>
+        </div>
+        <div class="column-picker" id="columnPicker" hidden></div>
+        <div class="table-wrap"><table class="results-table"><thead id="resultsHead"></thead><tbody id="resultsBody"></tbody></table></div>
+        <div class="table-footer"><span id="resultCount"></span><div class="pager"><button id="prevPage" type="button">Previous</button><span id="pageLabel"></span><button id="nextPage" type="button">Next</button></div></div>
+      </section>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast" role="status"></div>
+</body>
+</html>

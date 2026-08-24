@@ -1,0 +1,5 @@
+.git
+.playwright-cli
+gmapsdata
+output
+*.log
