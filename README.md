@@ -4,6 +4,8 @@
 
 Prospect Atlas turns a business category and location into a structured lead list. It combines a guided search workflow with live run status, automatic deduplication, lead-quality scoring, contact filters, and CSV/Excel exports—all running locally through Docker.
 
+Prospect Atlas is my local-first business discovery and lead-research project.
+
 ![Prospect Atlas dashboard](docs/prospect-atlas-preview.png)
 
 ## What it does
@@ -86,11 +88,9 @@ The dashboard also handles unavailable-engine states, input validation, failed d
 
 Use Prospect Atlas only for lawful research and collection of publicly available information. Respect applicable privacy laws, website terms, robots policies, and reasonable request rates. Large or repeated searches should use conservative concurrency and appropriate proxies.
 
-## Attribution
+## Open-source foundation
 
-Prospect Atlas is a portfolio product layer built on the excellent open-source [gosom/google-maps-scraper](https://github.com/gosom/google-maps-scraper) engine. The upstream project is MIT licensed; its license remains in [LICENSE](LICENSE), and its original README is preserved in [docs/UPSTREAM-README.md](docs/UPSTREAM-README.md).
-
-The Prospect Atlas contribution adds the guided dashboard, presets, search monitoring, deduplication and quality analysis, filtering, portfolio presentation, local Windows launch workflow, and export experience.
+This project uses the MIT-licensed [gosom/google-maps-scraper](https://github.com/gosom/google-maps-scraper) open-source engine. Its license remains in [LICENSE](LICENSE), and the original documentation is preserved in [docs/UPSTREAM-README.md](docs/UPSTREAM-README.md).
 
 ## License
 
