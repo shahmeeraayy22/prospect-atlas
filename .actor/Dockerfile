@@ -14,7 +14,8 @@ ENV DISABLE_TELEMETRY=1
 ENV APIFY_LOCAL_STORAGE_DIR=/app/storage
 COPY --from=builder /out/google-maps-scraper /usr/bin/google-maps-scraper
 COPY --from=builder /out/playwright /usr/bin/playwright
-RUN playwright install chromium --with-deps \
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates \
+    && playwright install chromium --with-deps \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY apify/package.json apify/package-lock.json ./
