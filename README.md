@@ -30,6 +30,14 @@ Prospect Atlas is my local-first business discovery and lead-research project.
 4. Monitor the run from the activity workspace.
 5. Review, filter, and export the resulting dataset.
 
+## Run on Apify
+
+The repository now includes an Apify batch Actor in `.actor/` and `apify/`.
+See [.actor/README.md](.actor/README.md) for input examples, deployment,
+result limits, and pay-per-event configuration. This adapter runs the existing
+Go scraper and writes unique business records to an Apify dataset. Its
+deployment and billing settings are separate from the local dashboard.
+
 ## Run locally on Windows
 
 Requirements: [Docker Desktop](https://www.docker.com/products/docker-desktop/) with Linux containers enabled.

@@ -1,0 +1,17 @@
+{
+  "title": "Prospect Atlas search",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "searchTerms": { "title": "Business types or search terms", "type": "array", "description": "One to ten business categories or keywords.", "editor": "stringList", "items": { "type": "string" }, "prefill": ["plumbers"] },
+    "location": { "title": "Target location", "type": "string", "description": "City, region and country. Search relevance is not a strict geographic boundary.", "editor": "textfield", "prefill": "Austin, Texas, USA" },
+    "maxResults": { "title": "Maximum unique businesses", "type": "integer", "description": "Output cap, not a guarantee of result count.", "default": 50, "minimum": 1, "maximum": 1000 },
+    "collectEmails": { "title": "Look for public website emails", "type": "boolean", "description": "Visits websites; slower and may return no emails. Empty does not prove absence.", "default": false },
+    "language": { "title": "Search language", "type": "string", "description": "Language code, for example en or de.", "editor": "textfield", "default": "en" },
+    "maxRunSeconds": { "title": "Scraping time limit in seconds", "type": "integer", "description": "Stops collection and preserves delivered results. Allow extra platform time for startup and saving.", "default": 300, "minimum": 30, "maximum": 1800 },
+    "depth": { "title": "Search scroll depth", "type": "integer", "description": "Higher depth can increase coverage and runtime.", "default": 3, "minimum": 1, "maximum": 20 },
+    "concurrency": { "title": "Concurrent browser pages", "type": "integer", "description": "Start at two with at least 2 GB memory.", "default": 2, "minimum": 1, "maximum": 4 },
+    "proxyConfiguration": { "title": "Proxy configuration", "type": "object", "description": "Optional Apify or custom proxies. Proxy availability and charges depend on your account.", "editor": "proxy", "default": { "useApifyProxy": false } }
+  },
+  "required": ["searchTerms", "location"]
+}

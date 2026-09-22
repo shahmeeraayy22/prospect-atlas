@@ -1,0 +1,8 @@
+{
+  "actorOutputSchemaVersion": 1,
+  "title": "Business leads and run summary",
+  "properties": {
+    "businesses": { "type": "string", "title": "Business leads", "template": "{{links.apiDefaultDatasetUrl}}/items" },
+    "summary": { "type": "string", "title": "Run summary", "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/RUN-SUMMARY" }
+  }
+}

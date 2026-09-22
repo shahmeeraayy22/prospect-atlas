@@ -9,3 +9,6 @@ gmaps-output
 gmapsdata/
 .playwright-cli/
 output/
+apify/node_modules/
+apify/storage/
+apify/*.exe

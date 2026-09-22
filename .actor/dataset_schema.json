@@ -1,0 +1,24 @@
+{
+  "actorSpecification": 1,
+  "views": {
+    "businesses": {
+      "title": "Business leads",
+      "transformation": { "fields": ["businessName", "category", "address", "phone", "website", "rating", "reviewCount", "emails", "googleMapsUrl", "scrapedAt"] },
+      "display": {
+        "component": "table",
+        "properties": {
+          "businessName": { "label": "Business", "format": "text" },
+          "category": { "label": "Category", "format": "text" },
+          "address": { "label": "Address", "format": "text" },
+          "phone": { "label": "Phone", "format": "text" },
+          "website": { "label": "Website", "format": "link" },
+          "rating": { "label": "Rating", "format": "number" },
+          "reviewCount": { "label": "Reviews", "format": "number" },
+          "emails": { "label": "Emails", "format": "array" },
+          "googleMapsUrl": { "label": "Google Maps", "format": "link" },
+          "scrapedAt": { "label": "Collected", "format": "date" }
+        }
+      }
+    }
+  }
+}

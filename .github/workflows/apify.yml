@@ -1,0 +1,41 @@
+name: Apify Actor
+on:
+  push:
+    branches: [main, 'codex/apify-actor']
+  pull_request:
+    paths: ['apify/**', '.actor/**', '.github/workflows/apify.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: apify/package-lock.json
+      - run: npm ci --no-audit --no-fund
+        working-directory: apify
+      - run: npm test
+        working-directory: apify
+      - name: Build cloud container
+        run: docker build -f .actor/Dockerfile -t prospect-atlas-apify .
+      - name: Check packaged engine
+        run: docker run --rm --entrypoint /usr/bin/google-maps-scraper prospect-atlas-apify -version
+      - name: Verify packaged browser and SDK
+        run: |
+          docker run --rm --entrypoint node prospect-atlas-apify --input-type=module -e '
+            import { Actor } from "apify";
+            import { createRequire } from "node:module";
+            const require = createRequire(import.meta.url);
+            const { chromium } = require("/opt/ms-playwright-go/package");
+            const browser = await chromium.launch({headless:true,args:["--no-sandbox"]});
+            const page = await browser.newPage();
+            await page.setContent("<title>Actor smoke test</title>");
+            if (await page.title() !== "Actor smoke test") throw new Error("Browser check failed");
+            await browser.close();
+            console.log("Browser and Apify SDK loaded successfully");'

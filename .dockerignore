@@ -3,3 +3,6 @@
 gmapsdata
 output
 *.log
+**/node_modules
+**/storage
+apify/*.exe

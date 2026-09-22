@@ -1,0 +1,16 @@
+{
+  "actorSpecification": 1,
+  "name": "prospect-atlas-local-business-leads",
+  "title": "Prospect Atlas Local Business Leads",
+  "version": "0.1",
+  "buildTag": "latest",
+  "dockerfile": "./Dockerfile",
+  "dockerContextDir": "..",
+  "input": "./input_schema.json",
+  "readme": "./README.md",
+  "output": "./output_schema.json",
+  "storages": { "dataset": "./dataset_schema.json" },
+  "defaultMemoryMbytes": 2048,
+  "minMemoryMbytes": 2048,
+  "maxMemoryMbytes": 8192
+}
